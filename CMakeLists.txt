@@ -24,9 +24,10 @@ else (WIN32)
   set(LEVELDB_PLATFORM_NAME LEVELDB_PLATFORM_POSIX)
 endif (WIN32)
 
-option(LEVELDB_BUILD_TESTS "Build LevelDB's unit tests" ON)
-option(LEVELDB_BUILD_BENCHMARKS "Build LevelDB's benchmarks" ON)
-option(LEVELDB_INSTALL "Install LevelDB's header and library" ON)
+option(LEVELDB_LEARN "Learn LevelDB'" ON)
+option(LEVELDB_BUILD_TESTS "Build LevelDB's unit tests" OFF)
+option(LEVELDB_BUILD_BENCHMARKS "Build LevelDB's benchmarks" OFF)
+option(LEVELDB_INSTALL "Install LevelDB's header and library" OFF)
 
 include(TestBigEndian)
 test_big_endian(LEVELDB_IS_BIG_ENDIAN)
@@ -94,6 +95,7 @@ if(BUILD_SHARED_LIBS)
   add_compile_options(-fvisibility=hidden)
 endif(BUILD_SHARED_LIBS)
 
+# START leveldb
 add_library(leveldb "")
 target_sources(leveldb
   PRIVATE
@@ -259,10 +261,10 @@ endif(HAVE_TCMALLOC)
 find_package(Threads REQUIRED)
 target_link_libraries(leveldb Threads::Threads)
 
-add_executable(leveldbutil
-  "${PROJECT_SOURCE_DIR}/db/leveldbutil.cc"
-)
-target_link_libraries(leveldbutil leveldb)
+# add_executable(leveldbutil
+#   "${PROJECT_SOURCE_DIR}/db/leveldbutil.cc"
+# )
+# target_link_libraries(leveldbutil leveldb)
 
 if(LEVELDB_BUILD_TESTS)
   enable_testing()
@@ -449,3 +451,21 @@ if(LEVELDB_INSTALL)
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/cmake/leveldb"
   )
 endif(LEVELDB_INSTALL)
+
+# if (LEVELDB_LEARN)
+#   set(arg "ABC")
+#   message("arg = ${arg}")
+#   set(arg "abc")
+#   message("# After change the value of arg.")
+#   message("arg = ${arg}")
+# else (LEVELDB_LEARN)
+#   message("LEVELDB_LEARN = ${LEVELDB_LEARN}")
+# endif (LEVELDB_LEARN)
+
+add_executable(test_app "")
+target_sources(test_app
+  PRIVATE
+    "${PROJECT_SOURCE_DIR}/lxt_test/test_app.cc"
+    "${PROJECT_SOURCE_DIR}/lxt_test/test_app.h"
+)
+target_link_libraries(test_app leveldb)
