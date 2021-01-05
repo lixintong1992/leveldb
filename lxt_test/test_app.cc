@@ -4,6 +4,17 @@
 #include "leveldb/db.h"
 #include "test_app.h"
 
+#define PRINT_MACRO_HELPER(x)   #x
+#define PRINT_MACRO(x)   #x "=" PRINT_MACRO_HELPER(x)
+
+#define NUMBER_MACRO 3.14159
+#define STRING_MACRO "This is a string."
+
+#pragma message(PRINT_MACRO(NUMBER_MACRO))
+#pragma message(PRINT_MACRO(STRING_MACRO))
+#pragma message(PRINT_MACRO(UNDEF_MACRO))
+#pragma message(PRINT_MACRO(LEVELDB_EXPORT))
+
 int main(int argc, char** argv) {
   std::cout << "lxt in main!!!" << test_num << std::endl;
   leveldb::DB* db;
@@ -12,7 +23,7 @@ int main(int argc, char** argv) {
   options.error_if_exists = false;
 
   std::cout << "========= START =========" << std::endl;
-  leveldb::Status status = leveldb::DB::Open(options, "./testdb", &db);
+  leveldb::Status status = leveldb::DB::Open(options, "./dbtest", &db);
   if (!status.ok()) {
       std::cerr << "Open status:" << status.ToString() << std::endl;
       return 1;
